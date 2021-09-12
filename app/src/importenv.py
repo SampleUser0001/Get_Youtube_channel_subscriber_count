@@ -6,6 +6,7 @@ from enum import Enum
 
 class ImportEnvKeyEnum(Enum):
   """ .envファイルのキーを書く """
+  API_KEY="API_KEY"
 
 load_dotenv(verbose=True)
 
@@ -14,7 +15,9 @@ load_dotenv(dotenv_path)
 
 ENV_DIC = {}
 # ImportEnvKeyEnumの値を書く
-ENV_KEYS = []
+ENV_KEYS = [
+  ImportEnvKeyEnum.API_KEY.value
+]
 
 for key in ENV_KEYS:
   ENV_DIC[key] = os.environ.get(key)

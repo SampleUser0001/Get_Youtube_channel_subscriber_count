@@ -18,8 +18,25 @@ logger.setLevel(DEBUG)
 logger.addHandler(handler)
 logger.propagate = False
 
+from googleapiclient.discovery import build
+
+def youtube_channel_detail(channel_id, api_key):
+  api_service_name = 'youtube'
+  api_version = 'v3'
+  youtube = build(api_service_name, api_version, developerKey=api_key)
+  search_response = youtube.channels().list(
+    part='snippet,statistics',
+    id=channel_id,
+  ).execute()
+
+  return search_response['items'][0]
+
 if __name__ == '__main__':
-  print('Hello Python on Docker!!')
-  logger.info('This is logger message!!')
-  # .envの取得
-  # setting.ENV_DIC[ImportEnvKeyEnum.importenvに書いた値.value]
+
+  args = sys.argv
+  channel_id = args[1]
+
+  logger.info('channel_id : {}'.format(channel_id))
+  d = youtube_channel_detail(channel_id, setting.ENV_DIC[ImportEnvKeyEnum.API_KEY.value])
+  logger.info(d['snippet']['title'])
+  logger.info(d['statistics']['subscriberCount'])
